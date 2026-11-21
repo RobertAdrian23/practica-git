@@ -1,0 +1,39 @@
+
+services:
+
+  # Servicio de nuestra API REST
+  api:
+    build: .
+    container_name: api-tareas
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/api_tareas
+      DB_USERNAME: api_user
+      DB_PASSWORD: clave_api123
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Servicio de PostgreSQL
+  db:
+    image: postgres:17
+    container_name: postgres-tareas
+    restart: always
+    environment:
+      POSTGRES_DB: api_tareas
+      POSTGRES_USER: api_user
+      POSTGRES_PASSWORD: clave_api123
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-datos:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U api_user -d api_tareas"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+# Volumen para conservar los datos
+volumes:
+  postgres-datos:
