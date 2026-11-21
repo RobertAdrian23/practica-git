@@ -1,7 +1,10 @@
+
 package com.example.api_tareas.controller;
 
 import com.example.api_tareas.dto.RegistroRequest;
+import com.example.api_tareas.dto.RegistroResponse;
 import com.example.api_tareas.dto.LoginRequest;
+import com.example.api_tareas.dto.ErrorResponse;
 import com.example.api_tareas.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,18 +46,18 @@ public class AuthController {
         try {
             var usuario = authService.registrar(request);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(
-                Map.of(
-                    "mensaje", "Usuario registrado correctamente",
-                    "id", usuario.getId(),
-                    "nombre", usuario.getNombre(),
-                    "correo", usuario.getCorreo()
-                )
+            RegistroResponse respuesta = new RegistroResponse(
+                "Usuario registrado correctamente",
+                usuario.getId(),
+                usuario.getNombre(),
+                usuario.getCorreo()
             );
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
 
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(
-                Map.of("error", e.getMessage())
+                new ErrorResponse(e.getMessage())
             );
         }
     }
@@ -80,7 +83,7 @@ public class AuthController {
 
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                Map.of("error", e.getMessage())
+                new ErrorResponse(e.getMessage())
             );
         }
     }

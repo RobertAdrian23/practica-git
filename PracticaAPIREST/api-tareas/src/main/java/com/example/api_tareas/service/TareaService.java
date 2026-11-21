@@ -2,8 +2,8 @@
 package com.example.api_tareas.service;
 
 import com.example.api_tareas.dto.TareaRequest;
-import com.example.api_tareas.model.Tarea;
-import com.example.api_tareas.model.Usuario;
+import com.example.api_tareas.entity.Tarea;
+import com.example.api_tareas.entity.Usuario;
 import com.example.api_tareas.repository.TareaRepository;
 import com.example.api_tareas.repository.UsuarioRepository;
 

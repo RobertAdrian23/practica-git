@@ -1,8 +1,8 @@
 package com.example.api_tareas.controller;
-
+import com.example.api_tareas.mapper.TareaMapper;
 import com.example.api_tareas.dto.TareaRequest;
 import com.example.api_tareas.dto.TareaResponse;
-import com.example.api_tareas.model.Tarea;
+import com.example.api_tareas.entity.Tarea;
 import com.example.api_tareas.service.TareaService;
 
 import jakarta.validation.Valid;
@@ -30,19 +30,14 @@ import java.util.List;
 public class TareaController {
 
     private final TareaService tareaService;
+    private final TareaMapper tareaMapper;
 
-    public TareaController(TareaService tareaService) {
-        this.tareaService = tareaService;
-    }
+    public TareaController(TareaService tareaService, TareaMapper tareaMapper) {
+    this.tareaService = tareaService;
+    this.tareaMapper = tareaMapper;
+}
 
-    private TareaResponse convertirRespuesta(Tarea tarea) {
-        return new TareaResponse(
-            tarea.getId(),
-            tarea.getTitulo(),
-            tarea.getDescripcion(),
-            tarea.isCompletada()
-        );
-    }
+
 
     @PostMapping
     @Operation(summary = "Crear tarea", description = "Registra una nueva tarea para el usuario autenticado")
@@ -58,7 +53,7 @@ public class TareaController {
         Tarea tarea = tareaService.crear(request, authentication.getName());
 
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(convertirRespuesta(tarea));
+            .body(tareaMapper.convertirRespuesta(tarea));
     }
 
     @GetMapping
@@ -73,7 +68,7 @@ public class TareaController {
     ) {
         List<TareaResponse> tareas = tareaService.listar(authentication.getName())
             .stream()
-            .map(this::convertirRespuesta)
+            .map(tareaMapper::convertirRespuesta)
             .toList();
 
         return ResponseEntity.ok(tareas);
@@ -98,7 +93,7 @@ public class TareaController {
             authentication.getName()
         );
 
-        return ResponseEntity.ok(convertirRespuesta(tarea));
+        return ResponseEntity.ok(tareaMapper.convertirRespuesta(tarea));
     }
 
     @DeleteMapping("/{id}")

@@ -2,8 +2,8 @@
 package com.example.api_tareas.service;
 
 import com.example.api_tareas.dto.RegistroRequest;
+import com.example.api_tareas.entity.Usuario;
 import com.example.api_tareas.dto.LoginRequest;
-import com.example.api_tareas.model.Usuario;
 import com.example.api_tareas.repository.UsuarioRepository;
 import com.example.api_tareas.security.JwtService;
 

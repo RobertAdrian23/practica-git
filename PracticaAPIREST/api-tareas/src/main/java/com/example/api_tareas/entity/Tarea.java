@@ -1,5 +1,5 @@
 
-package com.example.api_tareas.model;
+package com.example.api_tareas.entity;
 
 import jakarta.persistence.*;
 
